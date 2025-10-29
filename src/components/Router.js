@@ -19,12 +19,7 @@ export default class Router extends Component {
     function SendPersonajesSerie(){
         let {idserie} = useParams()
         return <Personajes idserie={idserie}/>
-    }
-
-    function SendPersonajeModificar(){
-        let {idserie , idpersonaje} = useParams()
-        return <ActualizarPersonaje idserie={idserie} idpersonaje={idpersonaje}/>
-    }
+    }   
 
     return (
       <BrowserRouter>
@@ -35,7 +30,6 @@ export default class Router extends Component {
             <Route path='/personajesserie/:idserie' element={<SendPersonajesSerie/>}/>
             <Route path="/crearpersonaje" element={<CrearPersonaje/>}/>
             <Route path='/modificarpersonaje' element={<ModificarPersonaje/>}/>
-            <Route path='/actualizardatos/personaje/:idserie/:idpersonaje' element={<SendPersonajeModificar/>}/>
         </Routes>
       </BrowserRouter>
     )

@@ -3,6 +3,7 @@ import axios from 'axios'
 import Global from './Global'
 import { Navigate, NavLink } from 'react-router-dom'
 import { data } from 'jquery'
+import Swal from 'sweetalert2'
 
 export default class ModificarPersonaje extends Component {
 
@@ -11,10 +12,8 @@ export default class ModificarPersonaje extends Component {
 
     state = {
         series: [],
-        personajesSerie: [],
+        personajes: [],
         operacionExitosa: false,
-        mostrarBoton: false,
-        datos: false
     }
 
     loadSeries = () => {
@@ -31,27 +30,31 @@ export default class ModificarPersonaje extends Component {
     loadPersonajes = () => {
         console.log("Buscando personajes...")
         let idse = this.cajaserie.current.value
-        let request = "api/Series/PersonajesSerie/" + idse
+        let request = "api/PErsonajes"
         axios.get(Global.url + request).then(response => {
             console.log("Personajes recibidos!")
             this.setState({
-                personajesSerie: response.data,
-                mostrarBoton: true
+                personajes: response.data,
             })
-        })
-    }
-
-    enviarAactualizar = (e) => {
-        e.preventDefault()
-        this.setState({
-            datos: true
         })
     }
 
     componentDidMount = () => {
         this.loadSeries()
+        this.loadPersonajes()
     }
 
+    updatePersonaje = (e) => {
+        e.preventDefault()
+        let request = "api/Personajes/"+ this.cajapersonaje.current.value + "/" + this.cajaserie.current.value
+        axios.put(Global.url+request).then(response=>{
+            console.log("Datos actualizados correctamente")
+            Swal.fire({
+                title: "Datos actualizados correctamente",
+                confirmButtonColor:"red"
+            })
+        })
+    }
     render() {
         return (
             <div>
@@ -63,9 +66,9 @@ export default class ModificarPersonaje extends Component {
                 <h3 className='text-center p-'>Elige una serie para ver sus personajes</h3>
 
                 <div className="w-100 d-flex justify-content-center">
-                    <form onSubmit={this.enviarAactualizar} >
+                    <form onSubmit={this.updatePersonaje} >
                         <label>Serie: </label>
-                        <select className='form-select' ref={this.cajaserie} onClick={this.loadPersonajes}>
+                        <select className='form-select' ref={this.cajaserie}>
                             {
                                 this.state.series.map((serie, index) => {
                                     return (
@@ -75,23 +78,18 @@ export default class ModificarPersonaje extends Component {
                             }
                         </select>
 
-                        {
-                            this.state.personajesSerie.length != 0 &&
-                            <label>Personajes: </label>
-                        }
-                        {
-                            this.state.personajesSerie.length != 0 &&
+                        <label>Personajes: </label>
 
-                            <select className='form-select' ref={this.cajapersonaje}>
-                                {
-                                    this.state.personajesSerie.map((per, index) => {
-                                        return (
-                                            <option value={per.idPersonaje} key={index} >{per.nombre}</option>
-                                        )
-                                    })
-                                }
-                            </select>
-                        }
+                        <select className='form-select' ref={this.cajapersonaje}>
+                            {
+                                this.state.personajes.map((per, index) => {
+                                    return (
+                                        <option value={per.idPersonaje} key={index} >{per.nombre}</option>
+                                    )
+                                })
+                            }
+                        </select>
+
 
                         <div className="d-grid p-2">
                             <input type="submit" value="Modificar" className='btn btn-danger' />
