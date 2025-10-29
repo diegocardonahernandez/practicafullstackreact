@@ -6,7 +6,6 @@ import Serie from './Serie'
 import Personajes from './Personajes'
 import CrearPersonaje from './CrearPersonaje'
 import ModificarPersonaje from './ModificarPersonaje'
-import ActualizarPersonaje from './ActualizarPersonaje'
 
 export default class Router extends Component {
   render() {
