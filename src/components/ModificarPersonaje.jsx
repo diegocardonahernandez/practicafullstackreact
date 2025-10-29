@@ -46,12 +46,16 @@ export default class ModificarPersonaje extends Component {
 
     updatePersonaje = (e) => {
         e.preventDefault()
-        let request = "api/Personajes/"+ this.cajapersonaje.current.value + "/" + this.cajaserie.current.value
-        axios.put(Global.url+request).then(response=>{
+        let request = "api/Personajes/" + this.cajapersonaje.current.value + "/" + this.cajaserie.current.value
+        axios.put(Global.url + request).then(response => {
             console.log("Datos actualizados correctamente")
             Swal.fire({
                 title: "Datos actualizados correctamente",
-                confirmButtonColor:"red"
+                confirmButtonColor: "red"
+            }).then(() => {
+                this.setState({
+                    operacionExitosa: true
+                })
             })
         })
     }
@@ -59,8 +63,8 @@ export default class ModificarPersonaje extends Component {
         return (
             <div>
                 {
-                    this.state.datos &&
-                    <Navigate to={"/actualizardatos/personaje/" + this.cajaserie.current.value + "/" + this.cajapersonaje.current.value}></Navigate>
+                    this.state.operacionExitosa &&
+                    <Navigate to={"/personajesserie/" + this.cajaserie.current.value} />
                 }
                 <h2 className='text-center text-danger p-2'>MODIFICAR PERSONAJES</h2>
                 <h3 className='text-center p-'>Elige una serie para ver sus personajes</h3>
